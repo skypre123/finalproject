@@ -1,12 +1,12 @@
 package com.example.finalproject;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.CalendarView;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.finalproject.databinding.ActivityMainBinding;
 
@@ -18,7 +18,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 
-public class MainActivity extends AppCompatActivity {
+public class DiaryActivity extends AppCompatActivity {
     private ActivityMainBinding binding;
     public  String saveFileName = null;
     public String contents = null;
@@ -33,11 +33,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth) {
                 binding.textDiary.setVisibility(View.VISIBLE);
-                binding.buttonSave.setVisibility(View.VISIBLE);
-                binding.editContext.setVisibility(View.VISIBLE);
-                binding.textContext.setVisibility(View.INVISIBLE);
-                binding.buttonChange.setVisibility(View.INVISIBLE);
-                binding.buttonDelete.setVisibility(View.INVISIBLE);
+                setting2();
                 binding.textDiary.setText(String.format("%d / %d / %d", year, month+1, dayOfMonth));
                 binding.editContext.setText("");
                 load(year, month, dayOfMonth);
@@ -48,22 +44,14 @@ public class MainActivity extends AppCompatActivity {
             contents = binding.editContext.getText().toString();
             writeFile(saveFileName, contents);
             binding.textContext.setText(contents);
-            binding.buttonSave.setVisibility(View.INVISIBLE);
-            binding.buttonChange.setVisibility(View.VISIBLE);
-            binding.buttonDelete.setVisibility(View.VISIBLE);
-            binding.editContext.setVisibility(View.INVISIBLE);
-            binding.textContext.setVisibility(View.VISIBLE);
+            setting1();
         });
 
     }
 
     private void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth) {
         binding.textDiary.setVisibility(View.VISIBLE);
-        binding.buttonSave.setVisibility(View.VISIBLE);
-        binding.editContext.setVisibility(View.VISIBLE);
-        binding.textContext.setVisibility(View.INVISIBLE);
-        binding.buttonChange.setVisibility(View.INVISIBLE);
-        binding.buttonDelete.setVisibility(View.INVISIBLE);
+        setting2();
         binding.textDiary.setText(String.format("%d / %d / %d", year, month+1, dayOfMonth));
         binding.editContext.setText("");
         load(year, month, dayOfMonth);
@@ -84,39 +72,23 @@ public class MainActivity extends AppCompatActivity {
         try {
             String loadedContents = readFile(saveFileName);
             binding.textContext.setText(loadedContents);
-            binding.textContext.setVisibility(View.VISIBLE);
-            binding.editContext.setVisibility(View.INVISIBLE);
-            binding.buttonSave.setVisibility(View.INVISIBLE);
-            binding.buttonChange.setVisibility(View.VISIBLE);
-            binding.buttonDelete.setVisibility(View.VISIBLE);
+            setting1();
 
             binding.buttonChange.setOnClickListener(v -> {
-                binding.buttonSave.setVisibility(View.VISIBLE);
-                binding.editContext.setVisibility(View.VISIBLE);
-                binding.textContext.setVisibility(View.INVISIBLE);
-                binding.buttonChange.setVisibility(View.INVISIBLE);
-                binding.buttonDelete.setVisibility(View.INVISIBLE);
+                setting2();
                 binding.editContext.setText(loadedContents);
                 binding.textContext.setText(binding.editContext.getText());
             });
 
             binding.buttonDelete.setOnClickListener(v -> {
-                binding.buttonSave.setVisibility(View.VISIBLE);
-                binding.editContext.setVisibility(View.VISIBLE);
-                binding.textContext.setVisibility(View.INVISIBLE);
-                binding.buttonChange.setVisibility(View.INVISIBLE);
-                binding.buttonDelete.setVisibility(View.INVISIBLE);
+                setting2();
                 binding.editContext.setText("");
                 removeDiary(saveFileName);
             });
 
             if(binding.textContext.getText()==null) {
                 binding.textDiary.setVisibility(View.VISIBLE);
-                binding.buttonSave.setVisibility(View.VISIBLE);
-                binding.editContext.setVisibility(View.VISIBLE);
-                binding.textContext.setVisibility(View.INVISIBLE);
-                binding.buttonChange.setVisibility(View.INVISIBLE);
-                binding.buttonDelete.setVisibility(View.INVISIBLE);
+                setting2();
             }
 
         } catch (FileNotFoundException e) {
@@ -152,5 +124,22 @@ public class MainActivity extends AppCompatActivity {
         } catch (Exception e){
             e.printStackTrace();
         }
+    }
+
+    private void setting1() {
+        binding.buttonSave.setVisibility(View.INVISIBLE);
+        binding.buttonChange.setVisibility(View.VISIBLE);
+        binding.buttonDelete.setVisibility(View.VISIBLE);
+        binding.editContext.setVisibility(View.INVISIBLE);
+        binding.textContext.setVisibility(View.VISIBLE);
+    }
+
+    private void setting2() {
+        binding.buttonSave.setVisibility(View.VISIBLE);
+        binding.buttonChange.setVisibility(View.INVISIBLE);
+        binding.buttonDelete.setVisibility(View.INVISIBLE);
+        binding.editContext.setVisibility(View.VISIBLE);
+        binding.textContext.setVisibility(View.INVISIBLE);
+
     }
 }

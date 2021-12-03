@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".MainActivity">
+    tools:context=".DiaryActivity">
 
     <CalendarView
         android:id="@+id/calendarView"
@@ -22,7 +22,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:text="Diet Diary"
+        android:text="나만의 다이어리"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
         android:textSize="25sp"
         app:layout_constraintEnd_toEndOf="parent"
