@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto">
@@ -42,17 +41,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/text_diary" />
 
-    <EditText
-        android:id="@+id/edit_title"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:layout_marginEnd="10dp"
-        android:hint="제목을 입력하세요"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/text1"
-        app:layout_constraintBaseline_toBaselineOf="@+id/text1" />
-
     <TextView
         android:id="@+id/text_title"
         android:layout_width="0dp"
@@ -63,8 +51,7 @@
         android:layout_marginEnd="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/text1"
-        app:layout_constraintBaseline_toBaselineOf="@+id/text1"
-        android:visibility="invisible"/>
+        app:layout_constraintBaseline_toBaselineOf="@+id/text1" />
 
     <TextView
         android:id="@+id/text2"
@@ -78,19 +65,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/text1" />
 
-    <EditText
-        android:id="@+id/edit_contents"
-        android:layout_width="0dp"
-        android:layout_height="116dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginEnd="10dp"
-        android:hint="내용을 입력하세요"
-        android:inputType="textMultiLine"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toEndOf="@+id/text2"
-        app:layout_constraintTop_toTopOf="@+id/text2" />
-
     <TextView
         android:id="@+id/text_contents"
         android:layout_width="0dp"
@@ -99,40 +73,38 @@
         android:layout_marginEnd="10dp"
         android:text="내용"
         android:textSize="18sp"
-        android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toEndOf="@+id/text2"
         app:layout_constraintTop_toTopOf="@+id/text2" />
-
-    <Button
-        android:id="@+id/button_photo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
-        android:text="사진 추가하기"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edit_contents" />
 
     <ImageView
         android:id="@+id/image"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="50dp"
-        android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/text_contents"
         app:srcCompat="@drawable/ic_launcher_background" />
 
     <Button
-        android:id="@+id/button_save"
+        android:id="@+id/button_change"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"
-        android:text="저장"
+        android:text="수정"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/button_delete" />
+
+    <Button
+        android:id="@+id/button_delete"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:text="삭제"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 

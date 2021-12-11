@@ -20,6 +20,8 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -30,7 +32,6 @@ import java.util.List;
 public class DiaryActivity extends AppCompatActivity {
     private ActivityMainBinding binding;
     public  String selectedDate = null;
-    public String contents = null;
     public List<DiaryModel> array = null;
     public DiaryModel item = null;
     public Gson gson = null;
@@ -55,7 +56,14 @@ public class DiaryActivity extends AppCompatActivity {
             }
             });
 
-        binding.buttonMove.setOnClickListener(v -> startContentsActivity());
+        binding.buttonWrite.setOnClickListener(v -> startContentsActivity());
+        binding.buttonReview.setOnClickListener(v -> startReviewActivity());
+    }
+
+    private void startReviewActivity() {
+        Intent intent = new Intent(this, ReviewActivity.class);
+        intent.putExtra("selectedDate", selectedDate);
+        startActivity(intent);
     }
 
     private void startContentsActivity() {
@@ -65,37 +73,60 @@ public class DiaryActivity extends AppCompatActivity {
     }
 
     private void load() {
-
+        gson = new Gson();
+        String diaryJson = null;
         int dataCount = 0;
-        int indexModel = 0;
-        for (int i = 0; i < array.size(); i++) {
-            if (array.get(i).getDate().equals(selectedDate)) {
-                dataCount++;
-                indexModel = i;
-            }
-        }
-        if (dataCount == 0) {
-            binding.buttonMove.setVisibility(View.VISIBLE);
-            binding.buttonMove.setText("일기 쓰러가기");
 
+        try {
+            diaryJson = readFile("diary.json");
+            array = gson.fromJson(diaryJson, new TypeToken<List<DiaryModel>>() {}.getType());
+
+            int indexModel = 0;
+            for (int i = 0; i < array.size(); i++) {
+                if (array.get(i).getDate().equals(selectedDate)) {
+                    dataCount++;
+                    indexModel = i;
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            return;
+        }
+
+        if (dataCount == 0) {
+            binding.buttonWrite.setVisibility(View.VISIBLE);
+            binding.textTitle.setVisibility(View.INVISIBLE);
+            binding.textEvaluation.setVisibility(View.INVISIBLE);
+            binding.buttonReview.setVisibility(View.INVISIBLE);
         } else {
-            this.item = array.get(indexModel);
-            binding.textTitle.setText(item.getTitle());
-            binding.textEvaluation.setText(item.getEvaluation());
+//            this.item = array.get(indexModel);
+            this.item = new DiaryModel();
+            binding.textTitle.setText("제목: "+item.getTitle());
+            binding.textEvaluation.setText("평가: "+item.getEvaluation());
             binding.textTitle.setVisibility(View.VISIBLE);
             binding.textEvaluation.setVisibility(View.VISIBLE);
-            binding.buttonMove.setVisibility(View.VISIBLE);
+            binding.buttonReview.setVisibility(View.VISIBLE);
+            binding.buttonWrite.setVisibility(View.INVISIBLE);
         }
     }
 
+    private String readFile(String filename) throws FileNotFoundException {
+        FileInputStream fis = openFileInput(filename);
 
-//        binding.buttonDelete.setOnClickListener(v -> {
-//            setting2();
-//            binding.editContext.setText("");
-//            array.remove(item);
-//            String jsonString = gson.toJson(array);
-//            writeFile("diary.json", jsonString);
-//        });
+        InputStreamReader inputStreamReader = new InputStreamReader(fis, StandardCharsets.UTF_8);
+
+        StringBuilder stringBuilder = new StringBuilder();
+        try (BufferedReader reader = new BufferedReader(inputStreamReader)) {
+            String line = reader.readLine();
+            while (line != null) {
+                stringBuilder.append(line).append('\n');
+                line = reader.readLine();
+            }
+        } catch (IOException e) {
+
+        }
+        return stringBuilder.toString().trim();
+    }
 
     private ActivityResultLauncher<String> requestPermissionLauncher = registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
         if (isGranted) {

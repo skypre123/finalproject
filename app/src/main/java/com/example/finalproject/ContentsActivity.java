@@ -62,11 +62,21 @@ public class ContentsActivity extends AppCompatActivity {
 
         binding.buttonBack.setOnClickListener(v -> onBackPressed());
         binding.buttonPhoto.setOnClickListener(v -> getPhoto());
-        binding.buttonSave.setOnClickListener(v -> save());
+        binding.buttonSave.setOnClickListener(v -> {
+            save();
+            startReviewActivity();
+        });
+    }
+
+    private void startReviewActivity() {
+        Intent intent = new Intent(this, ReviewActivity.class);
+        intent.putExtra("selectedDate", selectedDate);
+        startActivity(intent);
     }
 
     private void save() {
-        updateUri();
+        title = binding.editTitle.getText().toString();
+        contents = binding.editContents.getText().toString();
 
         int dataCount = 0;
         int indexModel = 0;
@@ -89,20 +99,6 @@ public class ContentsActivity extends AppCompatActivity {
         }
         String jsonString = gson.toJson(array);
         writeFile("diary.json", jsonString);
-    }
-
-    private void updateUri() {
-        title = binding.editTitle.getText().toString();
-        contents = binding.editContents.getText().toString();
-        binding.textTitle.setText(title);
-        binding.textContents.setText(contents);
-        binding.textTitle.setVisibility(View.VISIBLE);
-        binding.textContents.setVisibility(View.VISIBLE);
-        binding.editTitle.setVisibility(View.INVISIBLE);
-        binding.editContents.setVisibility(View.INVISIBLE);
-        binding.buttonSave.setVisibility(View.INVISIBLE);
-        binding.buttonChange.setVisibility(View.VISIBLE);
-        binding.buttonDelete.setVisibility(View.VISIBLE);
     }
 
     private void getPhoto() {
