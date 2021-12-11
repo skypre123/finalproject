@@ -72,6 +72,7 @@ public class ReviewActivity extends AppCompatActivity {
 
     private void startContentsActivity() {
         Intent intent = new Intent(this, ContentsActivity.class);
+        intent.putExtra("selectedDate", selectedDate);
         startActivity(intent);
     }
 

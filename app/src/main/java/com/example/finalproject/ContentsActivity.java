@@ -11,6 +11,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.View;
+import android.widget.RadioButton;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
@@ -39,6 +40,7 @@ public class ContentsActivity extends AppCompatActivity {
     public String selectedDate;
     public String title;
     public String contents;
+    public String evaluation;
     public List<DiaryModel> array = new ArrayList<>();
     public Gson gson = null;
 
@@ -78,6 +80,10 @@ public class ContentsActivity extends AppCompatActivity {
     private void save() {
         title = binding.editTitle.getText().toString();
         contents = binding.editContents.getText().toString();
+        int id = binding.radioGroup.getCheckedRadioButtonId();
+        RadioButton rb = (RadioButton) findViewById(id);
+        evaluation = rb.getText().toString();
+
 
         int dataCount = 0;
         int indexModel = 0;
@@ -92,11 +98,13 @@ public class ContentsActivity extends AppCompatActivity {
             newModel.setDate(selectedDate);
             newModel.setTitle(title);
             newModel.setText(contents);
+            newModel.setEvaluation(evaluation);
             array.add(newModel);
 
         } else {
             array.get(indexModel).setTitle(title);
             array.get(indexModel).setText(contents);
+            array.get(indexModel).setEvaluation(evaluation);
         }
         String jsonString = gson.toJson(array);
         writeFile("diary.json", jsonString);
