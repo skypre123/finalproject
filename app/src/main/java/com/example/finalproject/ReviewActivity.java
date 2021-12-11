@@ -59,6 +59,10 @@ public class ReviewActivity extends AppCompatActivity {
             if (diaryModel.getDate().equals(selectedDate)) {
                 binding.textTitle.setText(diaryModel.getTitle());
                 binding.textContents.setText(diaryModel.getText());
+                binding.textEvaluation.setText(diaryModel.getEvaluation());
+                String imageString = diaryModel.getImage();
+                Bitmap bitmap = getBitmapFromString(imageString);
+                binding.image.setImageBitmap(bitmap);
             }
         }
     }
