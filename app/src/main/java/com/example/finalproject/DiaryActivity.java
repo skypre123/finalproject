@@ -45,133 +45,57 @@ public class DiaryActivity extends AppCompatActivity {
             requestPermissionLauncher.launch(Manifest.permission.READ_EXTERNAL_STORAGE);
         }
 
-        gson = new Gson();
-        String diaryJson = null;
-        try {
-            diaryJson = readFromAssets("diary.json");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        array = gson.fromJson(diaryJson, new TypeToken<List<DiaryModel>>() {}.getType());
-
         binding.calendarView.setOnDateChangeListener( new CalendarView.OnDateChangeListener() {
             @Override
             public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth) {
                 binding.textDiary.setVisibility(View.VISIBLE);
-                setting2();
                 binding.textDiary.setText(String.format("%d / %d / %d", year, month+1, dayOfMonth));
                 selectedDate = ""+year+"-"+(month+1)+""+"-"+dayOfMonth+"";
-                binding.editContext.setText("");
                 load();
             }
             });
 
         binding.buttonMove.setOnClickListener(v -> startContentsActivity());
-
-        binding.buttonSave.setOnClickListener(v -> {
-            contents = binding.editContext.getText().toString();
-
-            int dataCount = 0;
-            int indexModel = 0;
-            for (int i = 0; i < array.size(); i++) {
-                if (array.get(i).getDate().equals(selectedDate)) {
-                    dataCount++;
-                    indexModel = i;
-                }
-            }
-            if (dataCount == 0) {
-                DiaryModel newModel = new DiaryModel();
-                newModel.setDate(selectedDate);
-                newModel.setText(contents);
-                array.add(newModel);
-
-            } else {
-                array.get(indexModel).setText(contents);
-            }
-            String jsonString = gson.toJson(array);
-            writeFile("diary.json", jsonString);
-            binding.textContext.setText(contents);
-            setting1();
-        });
     }
 
     private void startContentsActivity() {
         Intent intent = new Intent(this, ContentsActivity.class);
+        intent.putExtra("selectedDate", selectedDate);
         startActivity(intent);
     }
 
-    private void writeFile(String filename, String data) {
-        try (FileOutputStream fos = openFileOutput(filename, Context.MODE_PRIVATE)) {
-            fos.write(data.getBytes(StandardCharsets.UTF_8));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
     private void load() {
-        for (DiaryModel diary : array) {
-            if (diary.getDate().equals(selectedDate)) {
-                this.item = diary;
-                binding.textContext.setText(item.getText());
-                setting1();
+
+        int dataCount = 0;
+        int indexModel = 0;
+        for (int i = 0; i < array.size(); i++) {
+            if (array.get(i).getDate().equals(selectedDate)) {
+                dataCount++;
+                indexModel = i;
             }
         }
+        if (dataCount == 0) {
+            binding.buttonMove.setVisibility(View.VISIBLE);
+            binding.buttonMove.setText("일기 쓰러가기");
 
-        binding.buttonChange.setOnClickListener(v -> {
-            setting2();
-            binding.editContext.setText(item.getText());
-        });
-
-        binding.buttonDelete.setOnClickListener(v -> {
-            setting2();
-            binding.editContext.setText("");
-            array.remove(item);
-            String jsonString = gson.toJson(array);
-            writeFile("diary.json", jsonString);
-        });
-
-        if (binding.textContext.getText() == null) {
-            binding.textDiary.setVisibility(View.VISIBLE);
-            setting2();
+        } else {
+            this.item = array.get(indexModel);
+            binding.textTitle.setText(item.getTitle());
+            binding.textEvaluation.setText(item.getEvaluation());
+            binding.textTitle.setVisibility(View.VISIBLE);
+            binding.textEvaluation.setVisibility(View.VISIBLE);
+            binding.buttonMove.setVisibility(View.VISIBLE);
         }
     }
 
-    private String readStream(InputStream fis) {
-        InputStreamReader inputStreamReader = new InputStreamReader(fis, StandardCharsets.UTF_8);
 
-        StringBuilder stringBuilder = new StringBuilder();
-        try (BufferedReader reader = new BufferedReader(inputStreamReader)) {
-            String line = reader.readLine();
-            while (line != null) {
-                stringBuilder.append(line).append('\n');
-                line = reader.readLine();
-            }
-        } catch (IOException e) {
-
-        }
-        return stringBuilder.toString().trim();
-    }
-
-    private void setting1() {
-        binding.buttonSave.setVisibility(View.INVISIBLE);
-        binding.buttonChange.setVisibility(View.VISIBLE);
-        binding.buttonDelete.setVisibility(View.VISIBLE);
-        binding.editContext.setVisibility(View.INVISIBLE);
-        binding.textContext.setVisibility(View.VISIBLE);
-    }
-
-    private void setting2() {
-        binding.buttonSave.setVisibility(View.VISIBLE);
-        binding.buttonChange.setVisibility(View.INVISIBLE);
-        binding.buttonDelete.setVisibility(View.INVISIBLE);
-        binding.editContext.setVisibility(View.VISIBLE);
-        binding.textContext.setVisibility(View.INVISIBLE);
-    }
-
-    public String readFromAssets(String name) throws IOException {
-        InputStream inputStream = getAssets().open(name);
-        return readStream(inputStream);
-    }
+//        binding.buttonDelete.setOnClickListener(v -> {
+//            setting2();
+//            binding.editContext.setText("");
+//            array.remove(item);
+//            String jsonString = gson.toJson(array);
+//            writeFile("diary.json", jsonString);
+//        });
 
     private ActivityResultLauncher<String> requestPermissionLauncher = registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
         if (isGranted) {

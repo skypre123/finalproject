@@ -15,10 +15,10 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.491"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/text_title" />
+        app:layout_constraintTop_toBottomOf="@+id/text_logo" />
 
     <TextView
-        android:id="@+id/text_title"
+        android:id="@+id/text_logo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
@@ -33,66 +33,12 @@
         android:id="@+id/text_diary"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:textAppearance="@style/TextAppearance.AppCompat.Large"
         android:layout_margin="10dp"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/calendarView" />
-
-    <EditText
-        android:id="@+id/edit_context"
-        android:layout_width="0dp"
-        android:layout_height="116dp"
-        android:hint="내용을 입력하세요."
-        android:inputType="textMultiLine"
-        android:visibility="invisible"
-        android:layout_margin="10dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/text_diary" />
-
-    <TextView
-        android:id="@+id/text_context"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_margin="10dp"
-        android:visibility="invisible"
-        app:layout_constraintTop_toTopOf="@+id/edit_context"
-        app:layout_constraintBottom_toBottomOf="@+id/edit_context"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/edit_context"/>
-
-    <Button
-        android:id="@+id/button_save"
-        android:layout_width="180dp"
-        android:layout_height="wrap_content"
-        android:text="저장"
-        android:layout_margin="10dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edit_context"
-        android:visibility="invisible"/>
-
-    <Button
-        android:id="@+id/button_change"
-        android:layout_width="180dp"
-        android:layout_height="wrap_content"
-        android:text="수정"
-        app:layout_constraintBaseline_toBaselineOf="@+id/button_save"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/button_delete"
-        android:visibility="invisible"/>
-
-    <Button
-        android:id="@+id/button_delete"
-        android:layout_width="180dp"
-        android:layout_height="wrap_content"
-        android:text="삭제"
-        app:layout_constraintBaseline_toBaselineOf="@+id/button_change"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/button_change"
-        android:visibility="invisible"/>
 
     <Button
         android:id="@+id/button_back"
@@ -114,8 +60,36 @@
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="4dp"
         android:text="일기 보러가기"
+        android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
+
+    <TextView
+        android:id="@+id/text_title"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="40dp"
+        android:layout_marginEnd="10dp"
+        android:text="제목: "
+        android:visibility="invisible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/text_diary" />
+
+    <TextView
+        android:id="@+id/text_evaluation"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="40dp"
+        android:layout_marginEnd="10dp"
+        android:text="평가: "
+        android:visibility="invisible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/text_title" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
