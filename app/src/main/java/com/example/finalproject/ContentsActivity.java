@@ -10,6 +10,7 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Base64;
 import android.view.View;
 import android.widget.RadioButton;
 import android.widget.Toast;
@@ -25,6 +26,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -41,6 +43,8 @@ public class ContentsActivity extends AppCompatActivity {
     public String title;
     public String contents;
     public String evaluation;
+    public Bitmap bitmap;
+    public String imageString;
     public List<DiaryModel> array = new ArrayList<>();
     public Gson gson = null;
 
@@ -80,8 +84,9 @@ public class ContentsActivity extends AppCompatActivity {
     private void save() {
         title = binding.editTitle.getText().toString();
         contents = binding.editContents.getText().toString();
+        imageString = getStringFromBitmap(bitmap);
         int id = binding.radioGroup.getCheckedRadioButtonId();
-        RadioButton rb = (RadioButton) findViewById(id);
+        RadioButton rb = findViewById(id);
         evaluation = rb.getText().toString();
 
 
@@ -99,12 +104,14 @@ public class ContentsActivity extends AppCompatActivity {
             newModel.setTitle(title);
             newModel.setText(contents);
             newModel.setEvaluation(evaluation);
+            newModel.setImage(imageString);
             array.add(newModel);
 
         } else {
             array.get(indexModel).setTitle(title);
             array.get(indexModel).setText(contents);
             array.get(indexModel).setEvaluation(evaluation);
+            array.get(indexModel).setImage(imageString);
         }
         String jsonString = gson.toJson(array);
         writeFile("diary.json", jsonString);
@@ -120,7 +127,7 @@ public class ContentsActivity extends AppCompatActivity {
         Intent data = result.getData();
         if (result.getResultCode() == RESULT_OK && null != data) {
             Uri selectedImage = data.getData();
-            Bitmap bitmap = loadBitmap(selectedImage);
+            bitmap = loadBitmap(selectedImage);
             binding.image.setImageBitmap(bitmap);
             binding.image.setVisibility(View.VISIBLE);
             binding.buttonPhoto.setVisibility(View.INVISIBLE);
@@ -138,6 +145,15 @@ public class ContentsActivity extends AppCompatActivity {
         cursor.close();
 
         return BitmapFactory.decodeFile(picturePath);
+    }
+
+    private String getStringFromBitmap(Bitmap bitmapPicture) {
+        String encodedImage;
+        ByteArrayOutputStream byteArrayBitmapStream = new ByteArrayOutputStream();
+        bitmapPicture.compress(Bitmap.CompressFormat.PNG, 100, byteArrayBitmapStream);
+        byte[] b = byteArrayBitmapStream.toByteArray();
+        encodedImage = Base64.encodeToString(b, Base64.DEFAULT);
+        return encodedImage;
     }
 
     private String readFile(String filename) throws FileNotFoundException {

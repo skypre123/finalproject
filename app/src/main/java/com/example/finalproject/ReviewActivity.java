@@ -2,7 +2,10 @@ package com.example.finalproject;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.util.Base64;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -79,6 +82,12 @@ public class ReviewActivity extends AppCompatActivity {
     private void startDiaryActivity() {
         Intent intent = new Intent(this, DiaryActivity.class);
         startActivity(intent);
+    }
+
+    private Bitmap getBitmapFromString(String stringPicture) {
+        byte[] decodedString = Base64.decode(stringPicture, Base64.DEFAULT);
+        Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+        return decodedByte;
     }
 
     private String readFile(String filename) throws FileNotFoundException {
