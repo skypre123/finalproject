@@ -31,6 +31,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.List;
 
 public class ContentsActivity extends AppCompatActivity {
@@ -38,7 +39,7 @@ public class ContentsActivity extends AppCompatActivity {
     public String selectedDate;
     public String title;
     public String contents;
-    public List<DiaryModel> array = null;
+    public List<DiaryModel> array = new ArrayList<>();
     public Gson gson = null;
 
     @Override
@@ -51,10 +52,10 @@ public class ContentsActivity extends AppCompatActivity {
         String diaryJson = null;
         try {
             diaryJson = readFile("diary.json");
+            array = gson.fromJson(diaryJson, new TypeToken<List<DiaryModel>>() {}.getType());
         } catch (IOException e) {
             e.printStackTrace();
         }
-        array = gson.fromJson(diaryJson, new TypeToken<List<DiaryModel>>() {}.getType());
 
         Intent intent = getIntent();
         selectedDate = intent.getStringExtra("selectedDate");

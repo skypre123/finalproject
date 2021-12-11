@@ -27,13 +27,14 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.List;
 
 public class DiaryActivity extends AppCompatActivity {
     private ActivityMainBinding binding;
     public  String selectedDate = null;
-    public List<DiaryModel> array = null;
-    public DiaryModel item = null;
+    public List<DiaryModel> array = new ArrayList<>();
+    public DiaryModel item = new DiaryModel();
     public Gson gson = null;
 
     @Override
@@ -76,12 +77,12 @@ public class DiaryActivity extends AppCompatActivity {
         gson = new Gson();
         String diaryJson = null;
         int dataCount = 0;
+        int indexModel = 0;
 
         try {
             diaryJson = readFile("diary.json");
             array = gson.fromJson(diaryJson, new TypeToken<List<DiaryModel>>() {}.getType());
 
-            int indexModel = 0;
             for (int i = 0; i < array.size(); i++) {
                 if (array.get(i).getDate().equals(selectedDate)) {
                     dataCount++;
@@ -89,8 +90,7 @@ public class DiaryActivity extends AppCompatActivity {
                 }
             }
         } catch (IOException e) {
-            e.printStackTrace();
-            return;
+//            e.printStackTrace();
         }
 
         if (dataCount == 0) {
@@ -99,8 +99,7 @@ public class DiaryActivity extends AppCompatActivity {
             binding.textEvaluation.setVisibility(View.INVISIBLE);
             binding.buttonReview.setVisibility(View.INVISIBLE);
         } else {
-//            this.item = array.get(indexModel);
-            this.item = new DiaryModel();
+            this.item = array.get(indexModel);
             binding.textTitle.setText("제목: "+item.getTitle());
             binding.textEvaluation.setText("평가: "+item.getEvaluation());
             binding.textTitle.setVisibility(View.VISIBLE);
