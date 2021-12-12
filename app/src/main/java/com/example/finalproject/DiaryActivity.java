@@ -4,7 +4,10 @@ import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.util.Base64;
 import android.view.View;
 import android.widget.CalendarView;
 import android.widget.Toast;
@@ -16,10 +19,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
 import com.example.finalproject.databinding.ActivityMainBinding;
+import com.example.finalproject.utils.FileUtils;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -81,7 +86,7 @@ public class DiaryActivity extends AppCompatActivity {
         int indexModel = 0;
 
         try {
-            diaryJson = readFile("diary.json");
+            diaryJson = FileUtils.readFile(this, "diary.json");
             array = gson.fromJson(diaryJson, new TypeToken<List<DiaryModel>>() {}.getType());
 
             for (int i = 0; i < array.size(); i++) {
@@ -97,35 +102,25 @@ public class DiaryActivity extends AppCompatActivity {
         if (dataCount == 0) {
             binding.buttonWrite.setVisibility(View.VISIBLE);
             binding.textTitle.setVisibility(View.INVISIBLE);
-            binding.textEvaluation.setVisibility(View.INVISIBLE);
+            binding.image.setVisibility(View.INVISIBLE);
             binding.buttonReview.setVisibility(View.INVISIBLE);
         } else {
             this.item = array.get(indexModel);
             binding.textTitle.setText("제목: "+item.getTitle());
-            binding.textEvaluation.setText("평가: "+item.getEvaluation());
+            String imageString = item.getImage();
+            Bitmap bitmap = getBitmapFromString(imageString);
+            binding.image.setImageBitmap(bitmap);
             binding.textTitle.setVisibility(View.VISIBLE);
-            binding.textEvaluation.setVisibility(View.VISIBLE);
+            binding.image.setVisibility(View.VISIBLE);
             binding.buttonReview.setVisibility(View.VISIBLE);
             binding.buttonWrite.setVisibility(View.INVISIBLE);
         }
     }
 
-    private String readFile(String filename) throws FileNotFoundException {
-        FileInputStream fis = openFileInput(filename);
-
-        InputStreamReader inputStreamReader = new InputStreamReader(fis, StandardCharsets.UTF_8);
-
-        StringBuilder stringBuilder = new StringBuilder();
-        try (BufferedReader reader = new BufferedReader(inputStreamReader)) {
-            String line = reader.readLine();
-            while (line != null) {
-                stringBuilder.append(line).append('\n');
-                line = reader.readLine();
-            }
-        } catch (IOException e) {
-
-        }
-        return stringBuilder.toString().trim();
+    private Bitmap getBitmapFromString(String stringPicture) {
+        byte[] decodedString = Base64.decode(stringPicture, Base64.DEFAULT);
+        Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+        return decodedByte;
     }
 
     private ActivityResultLauncher<String> requestPermissionLauncher = registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {

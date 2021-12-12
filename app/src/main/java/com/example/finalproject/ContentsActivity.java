@@ -22,11 +22,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
 import com.example.finalproject.databinding.ActivityContentsBinding;
+import com.example.finalproject.utils.FileUtils;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -57,7 +59,7 @@ public class ContentsActivity extends AppCompatActivity {
         gson = new Gson();
         String diaryJson = null;
         try {
-            diaryJson = readFile("diary.json");
+            diaryJson = FileUtils.readFile(this, "diary.json");
             array = gson.fromJson(diaryJson, new TypeToken<List<DiaryModel>>() {}.getType());
         } catch (IOException e) {
             e.printStackTrace();
@@ -114,7 +116,7 @@ public class ContentsActivity extends AppCompatActivity {
             array.get(indexModel).setImage(imageString);
         }
         String jsonString = gson.toJson(array);
-        writeFile("diary.json", jsonString);
+        FileUtils.writeFile(this, "diary.json", jsonString);
     }
 
     private void getPhoto() {
@@ -154,32 +156,6 @@ public class ContentsActivity extends AppCompatActivity {
         byte[] b = byteArrayBitmapStream.toByteArray();
         encodedImage = Base64.encodeToString(b, Base64.DEFAULT);
         return encodedImage;
-    }
-
-    private String readFile(String filename) throws FileNotFoundException {
-        FileInputStream fis = openFileInput(filename);
-
-        InputStreamReader inputStreamReader = new InputStreamReader(fis, StandardCharsets.UTF_8);
-
-        StringBuilder stringBuilder = new StringBuilder();
-        try (BufferedReader reader = new BufferedReader(inputStreamReader)) {
-            String line = reader.readLine();
-            while (line != null) {
-                stringBuilder.append(line).append('\n');
-                line = reader.readLine();
-            }
-        } catch (IOException e) {
-
-        }
-        return stringBuilder.toString().trim();
-    }
-
-    private void writeFile(String filename, String data) {
-        try (FileOutputStream fos = openFileOutput(filename, Context.MODE_PRIVATE)) {
-            fos.write(data.getBytes(StandardCharsets.UTF_8));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
 }
