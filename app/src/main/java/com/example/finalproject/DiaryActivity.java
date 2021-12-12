@@ -51,6 +51,7 @@ public class DiaryActivity extends AppCompatActivity {
             @Override
             public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth) {
                 binding.textDiary.setVisibility(View.VISIBLE);
+                binding.divider.setVisibility(View.VISIBLE);
                 binding.textDiary.setText(String.format("%d / %d / %d", year, month+1, dayOfMonth));
                 selectedDate = ""+year+"-"+(month+1)+""+"-"+dayOfMonth+"";
                 load();
