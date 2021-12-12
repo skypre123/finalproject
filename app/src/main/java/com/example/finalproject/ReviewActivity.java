@@ -62,7 +62,7 @@ public class ReviewActivity extends AppCompatActivity {
                 binding.textContents.setText(diaryModel.getText());
                 binding.textEvaluation.setText(diaryModel.getEvaluation());
                 String imageString = diaryModel.getImage();
-                Bitmap bitmap = getBitmapFromString(imageString);
+                Bitmap bitmap = FileUtils.getBitmapFromString(imageString);
                 binding.image.setImageBitmap(bitmap);
             }
         }
@@ -87,12 +87,6 @@ public class ReviewActivity extends AppCompatActivity {
     private void startDiaryActivity() {
         Intent intent = new Intent(this, DiaryActivity.class);
         startActivity(intent);
-    }
-
-    private Bitmap getBitmapFromString(String stringPicture) {
-        byte[] decodedString = Base64.decode(stringPicture, Base64.DEFAULT);
-        Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
-        return decodedByte;
     }
 
 }

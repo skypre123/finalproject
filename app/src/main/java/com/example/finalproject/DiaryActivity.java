@@ -108,19 +108,13 @@ public class DiaryActivity extends AppCompatActivity {
             this.item = array.get(indexModel);
             binding.textTitle.setText("제목: "+item.getTitle());
             String imageString = item.getImage();
-            Bitmap bitmap = getBitmapFromString(imageString);
+            Bitmap bitmap = FileUtils.getBitmapFromString(imageString);
             binding.image.setImageBitmap(bitmap);
             binding.textTitle.setVisibility(View.VISIBLE);
             binding.image.setVisibility(View.VISIBLE);
             binding.buttonReview.setVisibility(View.VISIBLE);
             binding.buttonWrite.setVisibility(View.INVISIBLE);
         }
-    }
-
-    private Bitmap getBitmapFromString(String stringPicture) {
-        byte[] decodedString = Base64.decode(stringPicture, Base64.DEFAULT);
-        Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
-        return decodedByte;
     }
 
     private ActivityResultLauncher<String> requestPermissionLauncher = registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {

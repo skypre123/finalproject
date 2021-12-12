@@ -1,9 +1,12 @@
 package com.example.finalproject.utils;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Base64;
+
+import com.example.finalproject.ContentsActivity;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;
@@ -40,7 +43,7 @@ public class FileUtils {
         }
     }
 
-    private static Bitmap getBitmapFromString(String stringPicture) {
+    public static Bitmap getBitmapFromString(String stringPicture) {
         byte[] decodedString = Base64.decode(stringPicture, Base64.DEFAULT);
         Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
         return decodedByte;
